@@ -2,26 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+  body {
+    @apply bg-dark-bg text-white antialiased;
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  ::-webkit-scrollbar       { width: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-dark-surface; }
+  ::-webkit-scrollbar-thumb { @apply bg-dark-border rounded-full; }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer components {
+  .btn-primary {
+    @apply bg-brand-yellow text-dark-bg font-semibold px-6 py-3
+           rounded-full transition-opacity hover:opacity-85
+           active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent border border-dark-border text-white
+           px-6 py-3 rounded-full transition-colors
+           hover:border-white/50 active:scale-95;
+  }
+
+  .card {
+    @apply bg-dark-card border border-dark-border rounded-2xl
+           overflow-hidden transition-all
+           hover:-translate-y-1 hover:border-white/20 cursor-pointer;
+  }
+
+  .input {
+    @apply w-full bg-dark-card border border-dark-border rounded-xl
+           px-4 py-3 text-white placeholder-white/30
+           focus:outline-none focus:border-brand-yellow/50 transition-colors;
+  }
+
+  .label {
+    @apply block text-sm text-white/60 mb-2;
+  }
+
+  .tag {
+    @apply inline-block px-3 py-1 rounded-full text-xs font-medium;
+  }
+
+  .container-main {
+    @apply max-w-screen-xl mx-auto px-6 md:px-10;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee-scroll 22s linear infinite;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fade-up 0.5s ease forwards;
 }
