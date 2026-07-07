@@ -172,22 +172,9 @@ export default function ProductDetailPage({
             </span>
           </div>
 
-          {/* Tabs */}
+      {/* Description */}
           <div className="mt-10">
-            <div className="border-b border-dark-border flex mb-6">
-              {["Description", "File Info", "License"].map((tab, i) => (
-                <button
-                  key={tab}
-                  className={`px-5 py-3 text-sm border-b-2 -mb-px transition-colors ${
-                    i === 0
-                      ? "border-brand-yellow text-white font-medium"
-                      : "border-transparent text-white/30 hover:text-white/60"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
+            <h3 className="text-sm font-medium text-white mb-4">Description</h3>
             <p className="text-sm text-white/40 leading-relaxed max-w-lg">
               {p.description ?? "Tidak ada deskripsi."}
             </p>
