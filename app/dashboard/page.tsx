@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Upload, TrendingUp, ShoppingBag, Star, Eye } from "lucide-react";
+import { Upload, TrendingUp, ShoppingBag, Star, Eye, Trash2 } from "lucide-react";
 import { formatRupiah, formatCount } from "@/lib/utils";
 import { createClient } from "@/lib/supabase";
 import { useRequireAuth } from "@/lib/useRequireAuth";
@@ -63,6 +63,25 @@ export default function DashboardPage() {
     }
     load();
   }, []);
+
+  // ⬇️ TAMBAHIN FUNCTION BARU DI SINI
+  async function handleDelete(productId: string, productTitle: string) {
+    const confirmed = window.confirm(`Yakin mau hapus "${productTitle}"? Aksi ini ga bisa dibatalkan.`);
+    if (!confirmed) return;
+
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("products")
+      .delete()
+      .eq("id", productId);
+
+    if (error) {
+      alert("Gagal menghapus karya: " + error.message);
+      return;
+    }
+
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+  }
 
   if (!isLoggedIn) {
     return (
@@ -267,14 +286,20 @@ export default function DashboardPage() {
                         <td className="px-5 py-4 text-white/40">{formatCount(art.sales_count ?? 0)}</td>
                         <td className="px-5 py-4 text-white/40">{formatCount(art.likes_count ?? 0)}</td>
                         <td className="px-5 py-4">
-                          <div className="flex items-center justify-end">
-                            <Link
-                              href={`/products/${art.id}`}
-                              className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-white hover:border-white/30 transition-all"
-                            >
-                              <Eye size={14} />
-                            </Link>
-                          </div>
+                         <div className="flex items-center justify-end gap-2">
+  <Link
+    href={`/products/${art.id}`}
+    className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-white hover:border-white/30 transition-all"
+  >
+    <Eye size={14} />
+  </Link>
+  <button
+    onClick={() => handleDelete(art.id, art.title)}
+    className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-red-400 hover:border-red-400/50 transition-all"
+  >
+    <Trash2 size={14} />
+  </button>
+</div>
                         </td>
                       </tr>
                     ))}
