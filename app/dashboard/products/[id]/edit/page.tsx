@@ -81,9 +81,11 @@ export default function EditProductPage({
     const { error: updateError } = await supabase
       .from("products")
       .update({
-        title: title.trim(),
-        description: description.trim(),
-        price: priceNumber,
+        title:            title.trim(),
+        description:      description.trim(),
+        price:            priceNumber,
+        price_commercial: priceNumber,
+        price_extended:   priceNumber,
         category,
       })
       .eq("id", params.id);
