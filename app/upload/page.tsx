@@ -18,13 +18,11 @@ export default function UploadPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState("");
   const [form, setForm]       = useState({
-    title:            "",
-    description:      "",
-    category:         "",
-    tags:             "",
-    price:            "",
-    price_commercial: "",
-    price_extended:   "",
+    title:       "",
+    description: "",
+    category:    "",
+    tags:        "",
+    price:       "",
   });
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [artFile, setArtFile]     = useState<File | null>(null);
@@ -67,6 +65,8 @@ export default function UploadPage() {
 
       if (artError) throw new Error("Gagal upload file karya: " + artError.message);
 
+      const priceValue = parseInt(form.price);
+
       // Simpan ke database
       const { error: insertError } = await supabase
         .from("products")
@@ -76,9 +76,9 @@ export default function UploadPage() {
           description:      form.description,
           category:         form.category,
           tags:             form.tags.split(",").map((t) => t.trim()).filter(Boolean),
-          price:            parseInt(form.price),
-          price_commercial: parseInt(form.price_commercial),
-          price_extended:   parseInt(form.price_extended),
+          price:            priceValue,
+          price_commercial: priceValue,
+          price_extended:   priceValue,
           thumbnail_url:    thumbData.publicUrl,
           file_url:         artPath,
           file_format:      artExt?.toUpperCase() ?? "",
@@ -317,30 +317,16 @@ export default function UploadPage() {
 
             <div>
               <label className="label">Harga</label>
-              <div className="flex flex-col gap-3">
-                {[
-                  { key: "price",            label: "Personal",   desc: "Penggunaan pribadi, non-komersial"        },
-                  { key: "price_commercial", label: "Commercial", desc: "Dipakai untuk keperluan komersial"        },
-                  { key: "price_extended",   label: "Extended",   desc: "Hak penuh termasuk resale dan modifikasi" },
-                ].map((item) => (
-                  <div key={item.key} className="bg-dark-surface border border-dark-border rounded-xl p-4 flex items-center gap-4">
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{item.label}</p>
-                      <p className="text-xs text-white/25 mt-0.5">{item.desc}</p>
-                    </div>
-                    <div className="relative w-40">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/25 text-sm">Rp</span>
-                      <input
-                        type="number"
-                        className="input pl-9 text-right text-sm"
-                        placeholder="0"
-                        value={form[item.key as keyof typeof form]}
-                        onChange={(e) => setForm({ ...form, [item.key]: e.target.value })}
-                        required
-                      />
-                    </div>
-                  </div>
-                ))}
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/25 text-sm">Rp</span>
+                <input
+                  type="number"
+                  className="input pl-9"
+                  placeholder="0"
+                  value={form.price}
+                  onChange={(e) => setForm({ ...form, price: e.target.value })}
+                  required
+                />
               </div>
             </div>
 
