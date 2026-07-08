@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Upload, TrendingUp, ShoppingBag, Star, Eye, Trash2 } from "lucide-react";
+import { Upload, TrendingUp, ShoppingBag, Star, Eye, Trash2, Pencil } from "lucide-react";
 import { formatRupiah, formatCount } from "@/lib/utils";
 import { createClient } from "@/lib/supabase";
 import { useRequireAuth } from "@/lib/useRequireAuth";
@@ -286,21 +286,27 @@ export default function DashboardPage() {
                         <td className="px-5 py-4 text-white/40">{formatCount(art.sales_count ?? 0)}</td>
                         <td className="px-5 py-4 text-white/40">{formatCount(art.likes_count ?? 0)}</td>
                         <td className="px-5 py-4">
-                         <div className="flex items-center justify-end gap-2">
-  <Link
-    href={`/products/${art.id}`}
-    className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-white hover:border-white/30 transition-all"
-  >
-    <Eye size={14} />
-  </Link>
-  <button
-    onClick={() => handleDelete(art.id, art.title)}
-    className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-red-400 hover:border-red-400/50 transition-all"
-  >
-    <Trash2 size={14} />
-  </button>
-</div>
-                        </td>
+  <div className="flex items-center justify-end gap-2">
+    <Link
+      href={`/products/${art.id}`}
+      className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-white hover:border-white/30 transition-all"
+    >
+      <Eye size={14} />
+    </Link>
+    <Link
+      href={`/dashboard/products/${art.id}/edit`}
+      className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-brand-yellow hover:border-brand-yellow/50 transition-all"
+    >
+      <Pencil size={14} />
+    </Link>
+    <button
+      onClick={() => handleDelete(art.id, art.title)}
+      className="w-8 h-8 rounded-lg border border-dark-border flex items-center justify-center text-white/30 hover:text-red-400 hover:border-red-400/50 transition-all"
+    >
+      <Trash2 size={14} />
+    </button>
+  </div>
+</td>
                       </tr>
                     ))}
                   </tbody>
